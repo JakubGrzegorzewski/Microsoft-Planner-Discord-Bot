@@ -1,0 +1,15 @@
+services:
+  bot:
+    build: .
+    image: planner-discord-bot
+    container_name: planner-discord-bot
+    restart: unless-stopped
+    init: true                # forwards `docker stop` to the bot so it shuts down cleanly
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - planner-bot-data:/data   # SQLite state; survives rebuilds and restarts
+
+volumes:
+  planner-bot-data:

@@ -1,0 +1,36 @@
+# systemd unit for running the bot without Docker.
+#
+#   sudo useradd --system --home /opt/planner-bot --shell /usr/sbin/nologin plannerbot
+#   sudo cp -r . /opt/planner-bot && cd /opt/planner-bot
+#   sudo python3 -m venv .venv && sudo .venv/bin/pip install -r requirements.txt
+#   sudo cp .env.example .env && sudo nano .env        # fill in (DATA_DIR is set below)
+#   sudo chown -R root:plannerbot /opt/planner-bot && sudo chmod 640 .env
+#   sudo cp deploy/planner-bot.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now planner-bot
+#   journalctl -u planner-bot -f
+
+[Unit]
+Description=Planner Discord bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=plannerbot
+Group=plannerbot
+WorkingDirectory=/opt/planner-bot
+# The bot reads /opt/planner-bot/.env itself.
+ExecStart=/opt/planner-bot/.venv/bin/python bot.py
+Restart=on-failure
+RestartSec=15
+# Creates /var/lib/planner-bot, owned by the service user, for the SQLite state.
+StateDirectory=planner-bot
+Environment=DATA_DIR=/var/lib/planner-bot
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

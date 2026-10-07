@@ -1,0 +1,5 @@
+# Runtime dependencies. Install with:  pip install -r requirements.txt
+discord.py>=2.5,<3
+aiohttp>=3.9,<4
+msal>=1.28,<2
+python-dotenv>=1.0,<2

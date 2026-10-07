@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "SIM", "RET", "ASYNC", "PLE", "RUF"]
+ignore = [
+    "RUF001", "RUF002", "RUF003",  # typographic quotes in user-facing messages are intentional
+    "SIM105",                      # explicit try/except/pass reads better next to its comment
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["RUF012", "RUF043", "RUF059", "B905"]
